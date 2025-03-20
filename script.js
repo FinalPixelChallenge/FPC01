@@ -10,7 +10,7 @@ img.src = "image.jpeg";
 let hiddenPixels = [];
 let originalImageData;
 let processedComments = new Set(); // Houd bij welke comments al zijn verwerkt
-let lastWinner = ""; // Houd de naam van de laatste winnaar bij
+let lastWinner = localStorage.getItem("lastWinner") || ""; // Bewaar de laatste winnaar in localStorage
 
 img.onload = function () {
     canvas.width = img.width;
@@ -23,6 +23,10 @@ img.onload = function () {
     coverImage();
     updateRemainingPixels();
     fetchYouTubeComments();
+    
+    if (hiddenPixels.length === 0 && lastWinner) {
+        displayWinner(lastWinner);
+    }
 };
 
 function coverImage() {
@@ -31,7 +35,7 @@ function coverImage() {
 }
 
 function revealPixel(authorName) {
-    let pixelsToReveal = 5000;
+    let pixelsToReveal = 1000;
     let actualRevealed = 0;
 
     for (let i = 0; i < pixelsToReveal; i++) {
@@ -54,6 +58,7 @@ function revealPixel(authorName) {
     
     if (hiddenPixels.length === 0) {
         lastWinner = authorName;
+        localStorage.setItem("lastWinner", lastWinner); // Bewaar de winnaar
         displayWinner(lastWinner);
     }
 }
