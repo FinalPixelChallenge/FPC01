@@ -35,7 +35,7 @@ function coverImage() {
 }
 
 function revealPixel(authorName) {
-    let pixelsToReveal = 1000;
+    let pixelsToReveal = 10000;
     let actualRevealed = 0;
 
     for (let i = 0; i < pixelsToReveal; i++) {
