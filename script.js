@@ -9,6 +9,7 @@ img.src = "image.jpeg";
 
 let hiddenPixels = [];
 let originalImageData;
+let processedComments = new Set(); // Houd bij welke comments al zijn verwerkt
 
 img.onload = function () {
     canvas.width = img.width;
@@ -29,7 +30,10 @@ function coverImage() {
 }
 
 function revealPixel(authorName) {
-    for (let i = 0; i < 1000; i++) { // Onthul 1000 pixels per comment
+    let pixelsToReveal = 1000;
+    let actualRevealed = 0;
+
+    for (let i = 0; i < pixelsToReveal; i++) {
         if (hiddenPixels.length > 0) {
             let index = hiddenPixels.pop();
             let x = index % canvas.width;
@@ -40,9 +44,13 @@ function revealPixel(authorName) {
             imageData.data.set(pixelData);
             ctx.putImageData(imageData, x, y);
             
-            updateRemainingPixels();
+            actualRevealed++;
         }
     }
+
+    console.log(`Revealed ${actualRevealed} pixels by ${authorName}`);
+    updateRemainingPixels();
+    
     if (hiddenPixels.length === 0) {
         displayWinner(authorName);
     }
@@ -75,7 +83,10 @@ async function fetchYouTubeComments() {
         
         if (data.items) {
             data.items.forEach((item) => {
-                revealPixel(item.authorDetails.displayName);
+                if (!processedComments.has(item.id)) { // Zorg dat comments niet dubbel tellen
+                    revealPixel(item.authorDetails.displayName);
+                    processedComments.add(item.id);
+                }
             });
         }
     } catch (error) {
