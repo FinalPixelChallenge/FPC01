@@ -5,7 +5,7 @@ const winnerName = document.getElementById("winnerName");
 const remainingPixels = document.getElementById("pixelCount");
 
 const img = new Image();
-img.src = "image.jpg";
+img.src = "image.jpeg";
 
 const pixelSize = 5;
 let hiddenPixels = [];
