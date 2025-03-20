@@ -10,6 +10,7 @@ img.src = "image.jpeg";
 let hiddenPixels = [];
 let originalImageData;
 let processedComments = new Set(); // Houd bij welke comments al zijn verwerkt
+let lastWinner = ""; // Houd de naam van de laatste winnaar bij
 
 img.onload = function () {
     canvas.width = img.width;
@@ -30,7 +31,7 @@ function coverImage() {
 }
 
 function revealPixel(authorName) {
-    let pixelsToReveal = 1000;
+    let pixelsToReveal = 5000;
     let actualRevealed = 0;
 
     for (let i = 0; i < pixelsToReveal; i++) {
@@ -52,7 +53,8 @@ function revealPixel(authorName) {
     updateRemainingPixels();
     
     if (hiddenPixels.length === 0) {
-        displayWinner(authorName);
+        lastWinner = authorName;
+        displayWinner(lastWinner);
     }
 }
 
