@@ -107,7 +107,7 @@ async function fetchYouTubeComments() {
         console.error("Error fetching comments:", error);
     }
     
-    setTimeout(fetchYouTubeComments, 100); // Sneller ophalen, nu elke 100ms
+    setTimeout(fetchYouTubeComments, 500); // Sneller ophalen, nu elke 100ms
 }
 
 startButton.addEventListener("click", () => {
