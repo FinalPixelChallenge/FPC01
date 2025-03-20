@@ -7,7 +7,6 @@ const remainingPixels = document.getElementById("pixelCount");
 const img = new Image();
 img.src = "image.jpeg";
 
-const pixelSize = 5;
 let hiddenPixels = [];
 
 img.onload = function () {
@@ -15,7 +14,7 @@ img.onload = function () {
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
     
-    hiddenPixels = Array.from({ length: (canvas.width / pixelSize) * (canvas.height / pixelSize) }, (_, i) => i);
+    hiddenPixels = Array.from({ length: canvas.width * canvas.height }, (_, i) => i);
     shuffle(hiddenPixels);
     coverImage();
     updateRemainingPixels();
@@ -29,11 +28,12 @@ function coverImage() {
 function revealPixel() {
     if (hiddenPixels.length > 0) {
         let index = hiddenPixels.pop();
-        let x = (index % (canvas.width / pixelSize)) * pixelSize;
-        let y = Math.floor(index / (canvas.width / pixelSize)) * pixelSize;
+        let x = index % canvas.width;
+        let y = Math.floor(index / canvas.width);
         
-        // Haal de originele afbeelding terug per pixel
-        ctx.drawImage(img, x, y, pixelSize, pixelSize, x, y, pixelSize, pixelSize);
+        // Haal de originele pixel terug
+        let pixelData = ctx.getImageData(x, y, 1, 1);
+        ctx.putImageData(pixelData, x, y);
         
         updateRemainingPixels();
     }
