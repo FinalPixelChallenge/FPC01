@@ -3,6 +3,9 @@ const ctx = canvas.getContext("2d");
 const winnerMessage = document.getElementById("winnerMessage");
 const winnerName = document.getElementById("winnerName");
 const remainingPixels = document.getElementById("pixelCount");
+const startButton = document.getElementById("startButton");
+const stopButton = document.getElementById("stopButton");
+const resetButton = document.getElementById("resetButton");
 
 const img = new Image();
 img.src = "image.jpeg";
@@ -11,6 +14,7 @@ let hiddenPixels = [];
 let originalImageData;
 let processedComments = new Set(); // Houd bij welke comments al zijn verwerkt
 let lastWinner = localStorage.getItem("lastWinner") || ""; // Bewaar de laatste winnaar in localStorage
+let fetchingComments = false; // Controleert of de comment-fetching actief is
 
 img.onload = function () {
     canvas.width = img.width;
@@ -22,7 +26,6 @@ img.onload = function () {
     shuffle(hiddenPixels);
     coverImage();
     updateRemainingPixels();
-    fetchYouTubeComments();
     
     if (hiddenPixels.length === 0 && lastWinner) {
         displayWinner(lastWinner);
@@ -37,7 +40,7 @@ function coverImage() {
 function revealPixel(authorName) {
     if (hiddenPixels.length === 0) return;
 
-    let pixelsToReveal = 10000;
+    let pixelsToReveal = 1000;
     let actualRevealed = 0;
 
     for (let i = 0; i < pixelsToReveal; i++) {
@@ -82,6 +85,8 @@ function shuffle(array) {
 }
 
 async function fetchYouTubeComments() {
+    if (!fetchingComments) return;
+
     const apiKey = "AIzaSyAj56Pn4gfJdfVTEFYmu0BR-t3TrQF5IG8";
     const liveChatId = "Cg0KC2pmS2ZQZnlKUmRrKicKGFVDU0o0Z2tWQzZOcnZJSTh1bXp0ZjBPdxILamZLZlBmeUpSZGs";
     const url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=snippet,authorDetails&key=${apiKey}`;
@@ -104,3 +109,21 @@ async function fetchYouTubeComments() {
     
     setTimeout(fetchYouTubeComments, 200); // Sneller ophalen, nu elke 200ms
 }
+
+startButton.addEventListener("click", () => {
+    if (!fetchingComments) {
+        fetchingComments = true;
+        fetchYouTubeComments();
+    }
+});
+
+stopButton.addEventListener("click", () => {
+    fetchingComments = false;
+});
+
+resetButton.addEventListener("click", () => {
+    lastWinner = "";
+    localStorage.removeItem("lastWinner");
+    winnerMessage.style.display = "none";
+    img.onload();
+});
