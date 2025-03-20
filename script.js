@@ -35,6 +35,8 @@ function coverImage() {
 }
 
 function revealPixel(authorName) {
+    if (hiddenPixels.length === 0) return;
+
     let pixelsToReveal = 10000;
     let actualRevealed = 0;
 
@@ -100,5 +102,5 @@ async function fetchYouTubeComments() {
         console.error("Error fetching comments:", error);
     }
     
-    setTimeout(fetchYouTubeComments, 1000); // Verlaag interval naar 1s voor snellere updates
+    setTimeout(fetchYouTubeComments, 200); // Sneller ophalen, nu elke 200ms
 }
