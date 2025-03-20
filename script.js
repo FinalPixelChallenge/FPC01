@@ -107,7 +107,7 @@ async function fetchYouTubeComments() {
         console.error("Error fetching comments:", error);
     }
     
-    setTimeout(fetchYouTubeComments, 200); // Sneller ophalen, nu elke 200ms
+    setTimeout(fetchYouTubeComments, 100); // Sneller ophalen, nu elke 100ms
 }
 
 startButton.addEventListener("click", () => {
@@ -125,5 +125,10 @@ resetButton.addEventListener("click", () => {
     lastWinner = "";
     localStorage.removeItem("lastWinner");
     winnerMessage.style.display = "none";
-    img.onload();
+    
+    hiddenPixels = Array.from({ length: canvas.width * canvas.height }, (_, i) => i);
+    shuffle(hiddenPixels);
+    coverImage();
+    updateRemainingPixels();
+    processedComments.clear();
 });
