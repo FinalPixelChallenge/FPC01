@@ -20,6 +20,7 @@ img.onload = function () {
     shuffle(hiddenPixels);
     coverImage();
     updateRemainingPixels();
+    fetchYouTubeComments();
 };
 
 function coverImage() {
@@ -28,13 +29,12 @@ function coverImage() {
 }
 
 function revealPixel() {
-    for (let i = 0; i < 50000; i++) { // Onthul 50000 pixels per klik
+    for (let i = 0; i < 50000; i++) { // Onthul 50000 pixels per comment
         if (hiddenPixels.length > 0) {
             let index = hiddenPixels.pop();
             let x = index % canvas.width;
             let y = Math.floor(index / canvas.width);
             
-            // Haal de originele pixel uit de opgeslagen afbeelding en plaats deze terug
             let pixelData = originalImageData.data.slice((y * canvas.width + x) * 4, (y * canvas.width + x + 1) * 4);
             let imageData = ctx.createImageData(1, 1);
             imageData.data.set(pixelData);
@@ -64,4 +64,23 @@ function shuffle(array) {
     }
 }
 
-canvas.addEventListener("click", revealPixel);
+async function fetchYouTubeComments() {
+    const apiKey = "YOUR_YOUTUBE_API_KEY";
+    const liveChatId = "YOUR_LIVE_CHAT_ID";
+    const url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=snippet,authorDetails&key=${apiKey}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.items) {
+            data.items.forEach(() => {
+                revealPixel();
+            });
+        }
+    } catch (error) {
+        console.error("Error fetching comments:", error);
+    }
+    
+    setTimeout(fetchYouTubeComments, 5000);
+}
