@@ -32,8 +32,8 @@ function revealPixel() {
         let x = (index % (canvas.width / pixelSize)) * pixelSize;
         let y = Math.floor(index / (canvas.width / pixelSize)) * pixelSize;
         
-        ctx.globalCompositeOperation = "destination-over";
-        ctx.clearRect(x, y, pixelSize, pixelSize);
+        // Haal de originele afbeelding terug per pixel
+        ctx.drawImage(img, x, y, pixelSize, pixelSize, x, y, pixelSize, pixelSize);
         
         updateRemainingPixels();
     }
