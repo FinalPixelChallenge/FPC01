@@ -8,12 +8,14 @@ const img = new Image();
 img.src = "image.jpeg";
 
 let hiddenPixels = [];
+let originalImageData;
 
 img.onload = function () {
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
     
+    originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     hiddenPixels = Array.from({ length: canvas.width * canvas.height }, (_, i) => i);
     shuffle(hiddenPixels);
     coverImage();
@@ -31,9 +33,11 @@ function revealPixel() {
         let x = index % canvas.width;
         let y = Math.floor(index / canvas.width);
         
-        // Haal de originele pixel terug
-        let pixelData = ctx.getImageData(x, y, 1, 1);
-        ctx.putImageData(pixelData, x, y);
+        // Haal de originele pixel uit de opgeslagen afbeelding en plaats deze terug
+        let pixelData = originalImageData.data.slice((y * canvas.width + x) * 4, (y * canvas.width + x + 1) * 4);
+        let imageData = ctx.createImageData(1, 1);
+        imageData.data.set(pixelData);
+        ctx.putImageData(imageData, x, y);
         
         updateRemainingPixels();
     }
