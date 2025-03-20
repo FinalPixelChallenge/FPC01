@@ -15,28 +15,26 @@ img.onload = function () {
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
     
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    hiddenPixels = Array.from({ length: imgData.data.length / 4 }, (_, i) => i);
+    hiddenPixels = Array.from({ length: (canvas.width / pixelSize) * (canvas.height / pixelSize) }, (_, i) => i);
     shuffle(hiddenPixels);
-    hideImage();
+    coverImage();
     updateRemainingPixels();
 };
 
-function hideImage() {
+function coverImage() {
     ctx.fillStyle = "black";
-    for (let i = 0; i < hiddenPixels.length; i++) {
-        let x = (hiddenPixels[i] % canvas.width) * pixelSize;
-        let y = Math.floor(hiddenPixels[i] / canvas.width) * pixelSize;
-        ctx.fillRect(x, y, pixelSize, pixelSize);
-    }
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function revealPixel() {
     if (hiddenPixels.length > 0) {
         let index = hiddenPixels.pop();
-        let x = (index % canvas.width) * pixelSize;
-        let y = Math.floor(index / canvas.width) * pixelSize;
-        ctx.drawImage(img, x, y, pixelSize, pixelSize, x, y, pixelSize, pixelSize);
+        let x = (index % (canvas.width / pixelSize)) * pixelSize;
+        let y = Math.floor(index / (canvas.width / pixelSize)) * pixelSize;
+        
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.clearRect(x, y, pixelSize, pixelSize);
+        
         updateRemainingPixels();
     }
     if (hiddenPixels.length === 0) {
