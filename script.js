@@ -29,7 +29,7 @@ function coverImage() {
 }
 
 function revealPixel(authorName) {
-    for (let i = 0; i < 10000; i++) { // Onthul 10.000 pixels per comment
+    for (let i = 0; i < 1000; i++) { // Onthul 1000 pixels per comment
         if (hiddenPixels.length > 0) {
             let index = hiddenPixels.pop();
             let x = index % canvas.width;
