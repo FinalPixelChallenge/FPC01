@@ -28,18 +28,20 @@ function coverImage() {
 }
 
 function revealPixel() {
-    if (hiddenPixels.length > 0) {
-        let index = hiddenPixels.pop();
-        let x = index % canvas.width;
-        let y = Math.floor(index / canvas.width);
-        
-        // Haal de originele pixel uit de opgeslagen afbeelding en plaats deze terug
-        let pixelData = originalImageData.data.slice((y * canvas.width + x) * 4, (y * canvas.width + x + 1) * 4);
-        let imageData = ctx.createImageData(1, 1);
-        imageData.data.set(pixelData);
-        ctx.putImageData(imageData, x, y);
-        
-        updateRemainingPixels();
+    for (let i = 0; i < 50000; i++) { // Onthul 50000 pixels per klik
+        if (hiddenPixels.length > 0) {
+            let index = hiddenPixels.pop();
+            let x = index % canvas.width;
+            let y = Math.floor(index / canvas.width);
+            
+            // Haal de originele pixel uit de opgeslagen afbeelding en plaats deze terug
+            let pixelData = originalImageData.data.slice((y * canvas.width + x) * 4, (y * canvas.width + x + 1) * 4);
+            let imageData = ctx.createImageData(1, 1);
+            imageData.data.set(pixelData);
+            ctx.putImageData(imageData, x, y);
+            
+            updateRemainingPixels();
+        }
     }
     if (hiddenPixels.length === 0) {
         displayWinner("Final Player");
