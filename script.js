@@ -28,8 +28,8 @@ function coverImage() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function revealPixel() {
-    for (let i = 0; i < 50000; i++) { // Onthul 50000 pixels per comment
+function revealPixel(authorName) {
+    for (let i = 0; i < 10000; i++) { // Onthul 10.000 pixels per comment
         if (hiddenPixels.length > 0) {
             let index = hiddenPixels.pop();
             let x = index % canvas.width;
@@ -44,7 +44,7 @@ function revealPixel() {
         }
     }
     if (hiddenPixels.length === 0) {
-        displayWinner("Final Player");
+        displayWinner(authorName);
     }
 }
 
@@ -74,13 +74,13 @@ async function fetchYouTubeComments() {
         const data = await response.json();
         
         if (data.items) {
-            data.items.forEach(() => {
-                revealPixel();
+            data.items.forEach((item) => {
+                revealPixel(item.authorDetails.displayName);
             });
         }
     } catch (error) {
         console.error("Error fetching comments:", error);
     }
     
-    setTimeout(fetchYouTubeComments, 5000);
+    setTimeout(fetchYouTubeComments, 1000); // Verlaag interval naar 1s voor snellere updates
 }
