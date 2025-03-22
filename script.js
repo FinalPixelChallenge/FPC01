@@ -40,7 +40,7 @@ function coverImage() {
 function revealPixel(authorName) {
     if (hiddenPixels.length === 0) return;
 
-    let pixelsToReveal = 1000;
+    let pixelsToReveal = 1;
     let actualRevealed = 0;
 
     for (let i = 0; i < pixelsToReveal; i++) {
