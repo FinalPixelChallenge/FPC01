@@ -87,7 +87,7 @@ function shuffle(array) {
 async function fetchYouTubeComments() {
     if (!fetchingComments) return;
 
-    const apiKey = "AIzaSyC2IlPZ1BTBcs8_paKe_Rqk9nBl2DANro4";
+    const apiKey = "AIzaSyBOSW0hQYHk2cI0Whq4cPsfuWb_mOtRFkk";
     const liveChatId = "Cg0KC2pmS2ZQZnlKUmRrKicKGFVDU0o0Z2tWQzZOcnZJSTh1bXp0ZjBPdxILamZLZlBmeUpSZGs";
     const url = `https://www.googleapis.com/youtube/v3/liveChat/messages?liveChatId=${liveChatId}&part=snippet,authorDetails&key=${apiKey}`;
 
